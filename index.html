@@ -4,14 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Static Template</title>
+    <title>To-Do List App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="script" href="index.js">
   </head>
   <body>
+    <div class="to-do-app">
+      <h1> To Do List </h1>
+    <div class="items"> 
     <form>
       <input type="text" />
       <button id="add-item">add</button>
     </form>
-    <ul></ul>
+    <ol></ol>
+    </div>
     todo: <br />
     - add a live counter for "X total items" <br />
     - add a message conditionally if there are 0 to-do list items<br />
@@ -21,50 +27,52 @@
     - make a 2nd list on the screen for some items based on some filter - save
     and load the items in LocalStorage <br />
     - drag and drop items to reorder them
+  </div>
   </body>
   <script>
-    let tasks = [
-      { id: 0, text: "hey" },
-      { id: 1, text: "hi there" },
-      { id: 2, text: "how was it?" },
-      { id: 3, text: "ok great" }
-    ];
-    let counter = tasks.length;
+    
+let tasks = [
+    { id: 0, text: "hey" },
+    { id: 1, text: "hi there" },
+    { id: 2, text: "how was it?" },
+    { id: 3, text: "ok great" }
+  ];
+  let counter = tasks.length;
 
-    const updateHTML = () => {
-      const htmlTasks = tasks
-        .map((task, i) => {
-          return `<li id="${task.id}">
-          ${task.text}
-          <button class="delete-item" id="${task.id}">&#128465;</button>
-          </li>`;
-        })
-        .join("");
-      document.querySelector("ul").innerHTML = htmlTasks;
-      // listen to every delete button, remove the objet with its ID
-      // from the tasks array
-      const deleteButtons = document.querySelectorAll(".delete-item");
-      deleteButtons.forEach((btn) =>
-        btn.addEventListener("click", (event) => {
-          console.log(typeof parseInt(event.target.id));
-          removeItem(parseInt(event.target.id));
-          updateHTML();
-        })
-      );
-    };
-
-    const addItem = (msg) => tasks.push({ id: counter++, text: msg });
-    const removeItem = (id) => (tasks = tasks.filter((task) => task.id !== id));
-    document
-      .querySelector("#add-item")
-      .addEventListener("click", function (event) {
-        event.preventDefault();
-        let text = document.querySelector("input");
-        addItem(text.value);
-        text.value = "";
+  const updateHTML = () => {
+    const htmlTasks = tasks
+      .map((task, i) => {
+        return `<li id="${task.id}">
+        ${task.text}
+        <button class="delete-item" id="${task.id}">&#128465;</button>
+        </li>`;
+      })
+      .join("");
+    document.querySelector("ol").innerHTML = htmlTasks;
+    // listen to every delete button, remove the objet with its ID
+    // from the tasks array
+    const deleteButtons = document.querySelectorAll(".delete-item");
+    deleteButtons.forEach((btn) =>
+      btn.addEventListener("click", (event) => {
+        console.log(typeof parseInt(event.target.id));
+        removeItem(parseInt(event.target.id));
         updateHTML();
-      });
+      })
+    );
+  };
 
-    updateHTML();
+  const addItem = (msg) => tasks.push({ id: counter++, text: msg });
+  const removeItem = (id) => (tasks = tasks.filter((task) => task.id !== id));
+  document
+    .querySelector("#add-item")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      let text = document.querySelector("input");
+      addItem(text.value);
+      text.value = "";
+      updateHTML();
+    });
+
+  updateHTML();
   </script>
 </html>
