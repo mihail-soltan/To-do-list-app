@@ -17,6 +17,7 @@
       <button id="add-item">add</button>
     </form>
     <ol></ol>
+    <p></p>
     </div>
     todo: <br />
     - add a live counter for "X total items" <br />
@@ -59,10 +60,12 @@ let tasks = [
         updateHTML();
       })
     );
+    document.querySelector("p").innerHTML = liveCounter();
   };
-
   const addItem = (msg) => tasks.push({ id: counter++, text: msg });
   const removeItem = (id) => (tasks = tasks.filter((task) => task.id !== id));
+  const liveCounter = () => {return `Tasks left: ${counter}`}
+  
   document
     .querySelector("#add-item")
     .addEventListener("click", function (event) {
@@ -70,9 +73,9 @@ let tasks = [
       let text = document.querySelector("input");
       addItem(text.value);
       text.value = "";
+      liveCounter();
       updateHTML();
     });
-
   updateHTML();
   </script>
 </html>
