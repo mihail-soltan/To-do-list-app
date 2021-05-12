@@ -57,6 +57,7 @@ let tasks = [
       btn.addEventListener("click", (event) => {
         console.log(typeof parseInt(event.target.id));
         removeItem(parseInt(event.target.id));
+        liveCounter();
         updateHTML();
       })
     );
@@ -64,7 +65,7 @@ let tasks = [
   };
   const addItem = (msg) => tasks.push({ id: counter++, text: msg });
   const removeItem = (id) => (tasks = tasks.filter((task) => task.id !== id));
-  const liveCounter = () => {return `Tasks left: ${counter}`}
+  const liveCounter = () => {return `Tasks left: ${tasks.length}`}
   
   document
     .querySelector("#add-item")
@@ -76,6 +77,7 @@ let tasks = [
       liveCounter();
       updateHTML();
     });
+
   updateHTML();
   </script>
 </html>
