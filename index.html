@@ -13,7 +13,7 @@
       <h1> To Do List </h1>
     <div class="items"> 
     <form>
-      <input type="text" />
+      <input type="text" id="taskField"required />
       <button id="add-item">add</button>
     </form>
     <ol></ol>
@@ -39,7 +39,6 @@ let tasks = [
     { id: 3, text: "ok great" }
   ];
   let counter = tasks.length;
-
   const updateHTML = () => {
     const htmlTasks = tasks
       .map((task, i) => {
@@ -79,10 +78,13 @@ let tasks = [
     .addEventListener("click", function (event) {
       event.preventDefault();
       let text = document.querySelector("input");
-      addItem(text.value);
+      if (text.value.length > 0){addItem(text.value);
       text.value = "";
+      text.value.length > 0;
       liveCounter();
-      updateHTML();
+      updateHTML();} else{
+        alert('Input Required!')
+      }
     });
 
   updateHTML();
