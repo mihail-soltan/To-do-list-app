@@ -65,7 +65,14 @@ let tasks = [
   };
   const addItem = (msg) => tasks.push({ id: counter++, text: msg });
   const removeItem = (id) => (tasks = tasks.filter((task) => task.id !== id));
-  const liveCounter = () => {return `Tasks left: ${tasks.length}`}
+  //const liveCounter = () => {return `Tasks left: ${tasks.length}`}
+  const liveCounter = () => {if (tasks.length > 0) {
+    return `Tasks left ${tasks.length}`
+  } else{
+    //alert('There are no tasks left!')
+    return `There are no tasks left`
+  }}
+
   
   document
     .querySelector("#add-item")
