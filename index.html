@@ -33,6 +33,10 @@
        </select>
       </fieldset>
  
+      <input type="text" id="taskField"required />
+      <button id="add-item">add</button>
+      <!-- added the urgent button -->
+      <button id="urgent-item">urgent</button>
     </form>
     <!-- <input type="text" id="search"> -->
     <fieldset>
@@ -98,6 +102,30 @@ let tasks = [];
         ${text}
         <button class="delete-item" id="${task.id}">&#128465;</button>
         </li>`
+
+   //updated the priority property 
+let tasks = [
+    { id: 0, text: "hey",  priority: true },
+    { id: 1, text: "hi there", priority: false },
+    { id: 2, text: "how was it?",  priority: false },
+    { id: 3, text: "ok great",  priority: true }
+  ];
+  let counter = tasks.length;
+  //added condition for urgent
+  const updateHTML = () => {
+    const htmlTasks = tasks
+      .map((task, i) => {
+        if (task.priority === true) {
+          return `<li id="${task.id}" class = "redText">
+          ${task.text}
+          <button class="delete-item" id="${task.id}">&#128465;</button>
+          </li>`;
+        }
+        else {
+          return `<li id="${task.id}" >
+          ${task.text}
+          <button class="delete-item" id="${task.id}">&#128465;</button>
+          </li>`;
 
         }
       })
@@ -167,6 +195,13 @@ let tasks = [];
     (tasks = tasks.filter((task) => task.id !== id));
     localStorage.setItem("task", JSON.stringify(tasks));
   };
+  //updated the priority property
+  const addItem = (msg) => tasks.push({ id: counter++, text: msg, priority: false });
+  //Added function for urgent items
+  const addUrgentItem = (msg) => tasks.push({ id: counter++, text: msg, priority: true });
+
+  const removeItem = (id) => (tasks = tasks.filter((task) => task.id !== id));
+
   //const liveCounter = () => {return `Tasks left: ${tasks.length}`}
   const liveCounter = () => {if (tasks.length > 0) {
     return `Remaining tasks: ${tasks.length}`
@@ -213,6 +248,23 @@ let tasks = [];
         alert('Input Required!')
       }
     });
+// for the urgent item addUrgentItem(textUrg.value);
+    document
+        .querySelector("#urgent-item")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          let textUrg = document.querySelector("input");
+          console.log(textUrg)
+          if (textUrg.value.length > 0) {
+            addUrgentItem(textUrg.value);
+            textUrg.value = "";
+            textUrg.value.length > 0;
+            liveCounter();
+            updateHTML();
+          } else {
+            alert('Input Required!')
+          }
+        });
 
   document
     .querySelector("#urgent-item")

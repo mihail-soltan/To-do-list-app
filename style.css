@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Goblin+One&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Goblin+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
 body {
     margin: 0;
     background-color: burlywood;
     background-image: url(file:///C:/Users/User/projects/weekly-project-3/background.png);
 }
 h1 {
-    font-family: 'Goblin One', cursive;
+  font-family: "Goblin One", cursive;
 }
 .to-do-app {
     display: flex;
@@ -71,4 +71,17 @@ select {
     fieldset {
         width: 300px;
     }
+}
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.items {
+  align-items: flex-start;
+  font-family: "Raleway", sans-serif;
+}
+ol,
+li {
+  padding: 10px 20px;
 }
