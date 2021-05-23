@@ -13,14 +13,37 @@
       <h1> To Do List </h1>
     <div class="items"> 
     <form>
+      <fieldset>
+        <legend>Add a to-do item</legend>
+      <input type="text" id="taskField" required placeholder="Add task"/>
+      <button id="add-item">ADD TASK</button>
+      <button id="urgent-item">URGENT</button>
+      <select name="categories" id="categories">
+       <!-- <option value="">Select category</option> -->
+       <option value="all">all</option>
+        <option value="work">work</option>
+        <option value="family">family</option>
+        <option value="finance">finance</option>
+        <option value="personal">personal</option>
+        <option value="chores">chores</option>
+      </select>
+      <select name="priorityLevels" id="priorityLevels">
+        <option id="dropdown" value="all">all</option>
+        <option id="dropdown" value="urgent">urgent</option>
+       </select>
+      </fieldset>
+ 
       <input type="text" id="taskField"required />
-      <button id="add-item">add</button>
-      <!-- added the urgent button -->
-      <button id="urgent-item">urgent</button>
     </form>
+    <!-- <input type="text" id="search"> -->
+    <fieldset>
+      <legend>Tasks</legend>
     <ol></ol>
+  </fieldset>
     <p></p>
+
     </div>
+        <!--
     todo: <br />
     - add a live counter for "X total items" <br />
     - add a message conditionally if there are 0 to-do list items<br />
@@ -29,10 +52,54 @@
     - highlight tasks that include the word "urgent" in the list <br />
     - make a 2nd list on the screen for some items based on some filter - save
     and load the items in LocalStorage <br />
-    - drag and drop items to reorder them
-  </div>
+    - drag and drop items to reorder them -->
+  </div> 
   </body>
   <script>
+
+let userFilterSelection = "all"
+let userSearch = ""
+let userPrioritySelection = "all"
+let tasks = [];
+  let counter = tasks.length;
+
+  if (localStorage.getItem("task")) {
+      tasks = JSON.parse(localStorage.getItem("task"));
+      console.log(tasks.length);
+    }
+
+    if (tasks.length === 0) {
+      localStorage.setItem("counter", 0);
+      counter = 0;
+      console.log("did kdlkl");
+    }
+
+    if (localStorage.getItem("counter")) {
+      counter = JSON.parse(localStorage.getItem("counter"));
+    } else {
+      localStorage.setItem("counter", 0);
+    }
+
+
+
+
+  const updateHTML = () => {
+    const htmlTasks = tasks
+//      .filter((task) => task.category && task.category.includes(userSearch)) - filters categories
+      .filter((task) => userFilterSelection === "all" || task.category === userFilterSelection)
+      .filter((task) => userPrioritySelection === "all" || task.priority === true)
+
+      .map((task, i) => { 
+        const text = task.text.charAt(0).toUpperCase() + task.text.slice(1)
+        if (task.priority === true) {
+        return `<li id="${task.id}" style = "color: red">
+        ${text}
+        <button class="delete-item" id="${task.id}">&#128465;</button>
+        </li>`} else {return `<li id="${task.id}" >
+        ${text}
+        <button class="delete-item" id="${task.id}">&#128465;</button>
+        </li>`
+
    //updated the priority property 
 let tasks = [
     { id: 0, text: "hey",  priority: true },
@@ -56,6 +123,7 @@ let tasks = [
           ${task.text}
           <button class="delete-item" id="${task.id}">&#128465;</button>
           </li>`;
+
         }
       })
       .join("");
@@ -73,27 +141,103 @@ let tasks = [
     );
     document.querySelector("p").innerHTML = liveCounter();
   };
+  const addItem = (text, priority = false, category) => {
+    if (text.includes('work')){
+    tasks.push({ id: counter++, text, priority, category: 'work'});
+    localStorage.setItem("counter", counter);} else if(text.includes('family')){
+      tasks.push({id: counter++, text, priority, category: 'family'})
+      localStorage.setItem("counter", counter);
+    } else if(text.includes('money')){
+      tasks.push({id: counter++, text, priority, category: 'finance'})
+      localStorage.setItem("counter", counter);
+    } else if(text.includes('personal')){
+      tasks.push({id: counter++, text, priority, category: 'personal'})
+      localStorage.setItem("counter", counter);
+    } else if(text.includes('chore')){
+      tasks.push({id: counter++, text, priority, category: 'chores'})
+      localStorage.setItem("counter", counter);
+    }
+    
+    else{
+      tasks.push({ id: counter++, text, priority, category: 'general'})
+      localStorage.setItem("counter", counter);
+    }
+  };
+  const addUrgentItem =(text, priority = true, category) => {
+    if (text.includes('work')){
+    tasks.push({ id: counter++, text, priority, category: 'work'});
+    localStorage.setItem("counter", counter);} else if(text.includes('family')){
+      tasks.push({id: counter++, text, priority, category: 'family'})
+      localStorage.setItem("counter", counter);
+    } else if(text.includes('money')){
+      tasks.push({id: counter++, text, priority, category: 'finance'})
+      localStorage.setItem("counter", counter);
+    } else if(text.includes('personal')){
+      tasks.push({id: counter++, text, priority, category: 'personal'})
+      localStorage.setItem("counter", counter);
+    } else if(text.includes('chore')){
+      tasks.push({id: counter++, text, priority, category: 'chores'})
+      localStorage.setItem("counter", counter);
+    } else {tasks.push({ id: counter++, text, priority: true })} ;
+  } 
+  
+    // Local Storage
+    const saveToLocalStorage = () => {
+    tasks.forEach((task) => {
+      localStorage.setItem("task", JSON.stringify(tasks));
+    });
+  };
+
+  const removeItem = (id) => {
+    (tasks = tasks.filter((task) => task.id !== id));
+    localStorage.setItem("task", JSON.stringify(tasks));
+  };
   //updated the priority property
   const addItem = (msg) => tasks.push({ id: counter++, text: msg, priority: false });
   //Added function for urgent items
   const addUrgentItem = (msg) => tasks.push({ id: counter++, text: msg, priority: true });
 
   const removeItem = (id) => (tasks = tasks.filter((task) => task.id !== id));
+
   //const liveCounter = () => {return `Tasks left: ${tasks.length}`}
   const liveCounter = () => {if (tasks.length > 0) {
-    return `Tasks left ${tasks.length}`
+    return `Remaining tasks: ${tasks.length}`
   } else{
     //alert('There are no tasks left!')
     return `There are no tasks left`
   }}
 
+  const urgentCategory = () => {tasks.filter(task => task.priority === true);
+    }   //filters urgent tasks
+  const selectCategory = document.querySelector("#categories")
+  selectCategory.addEventListener("change", function(event){
+    console.log(event.target.value)
+    userFilterSelection = event.target.value
+    updateHTML();
+  })
   
+  const selectPriority = document.querySelector("#priorityLevels")
+  selectPriority.addEventListener("change", function(event){
+    console.log(event.target.value)
+    userPrioritySelection = event.target.value
+    updateHTML();
+  })
+  /*
+  const searchCategory = document.querySelector("#search")
+  searchCategory.addEventListener("change", function(event){
+    event.preventDefault()
+    userSearch = event.target.value
+    updateHTML();
+  }) 
+   */
   document
     .querySelector("#add-item")
     .addEventListener("click", function (event) {
       event.preventDefault();
       let text = document.querySelector("input");
-      if (text.value.length > 0){addItem(text.value);
+      if (text.value.length > 0){
+      addItem(text.value.toLowerCase());
+      saveToLocalStorage();
       text.value = "";
       text.value.length > 0;
       liveCounter();
@@ -119,6 +263,21 @@ let tasks = [
           }
         });
 
+  document
+    .querySelector("#urgent-item")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      let text = document.querySelector("input");
+      if (text.value.length > 0) {
+        addUrgentItem(text.value);
+        saveToLocalStorage();
+        text.value = "";
+        liveCounter();
+        updateHTML();
+      } else {
+        text.value.required = true;
+      }
+    })
   updateHTML();
   </script>
 </html>
