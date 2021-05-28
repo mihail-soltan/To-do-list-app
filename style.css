@@ -3,7 +3,7 @@
 body {
   margin: 0;
   background-color: burlywood;
-  /* background-image: url(background.png); */
+  background-image: url(background.png); 
 }
 h1 {
   font-family: "Goblin One", cursive;
@@ -48,12 +48,28 @@ fieldset {
   opacity: 0.75;
   position: relative;
 }
+#menu {
+  display: flex;
+  width: 520px;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
 legend {
   font-weight: bold;
 }
 #taskField {
   margin: 5px;
   padding: 5px;
+  width: 200px;
+  height: 20px
+}
+.dateHere {
+  margin: 5px;
+  padding: 5px;
+  height: 20px;
+  width: 200px;
 }
 #add-item,
 #urgent-item {
@@ -62,6 +78,8 @@ legend {
   background-color: #ff9700;
   border: 2px solid black;
   border-radius: 3px;
+  width: 123px;
+  margin: 5px;
 }
 
 #add-item:hover,
@@ -76,7 +94,7 @@ p {
   font-weight: 600;
 }
 @media (max-width: 500px) {
-  fieldset {
+  fieldset, #menu {
     width: 370px;
   }
   #add-item,
@@ -90,9 +108,25 @@ p {
   select {
     float: center;
   }
+  #taskField, .dateHere {
+    width: 150px;
+  }
+  #add-item, #urgent-item, #categories, #priorityLevels {
+    width: 160px;
+  }
 }
 @media (max-width: 400px) {
-  fieldset {
+  fieldset, #menu {
     width: 300px;
   }
+  #taskField{
+    width: 125px;
+  }
+  .dateHere {
+    width: 125px;
+  }
+  #add-item, #urgent-item, #categories, #priorityLevels {
+    width: 140px;
+  }
+  
 }
