@@ -1,91 +1,98 @@
 @import url("https://fonts.googleapis.com/css2?family=Goblin+One&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Raleway&display=swap");
 body {
-    margin: 0;
-    background-color: burlywood;
-    background-image: url(background.png);
+  margin: 0;
+  background-color: burlywood;
+  /* background-image: url(background.png); */
 }
 h1 {
   font-family: "Goblin One", cursive;
 }
 .to-do-app {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-.items {
-    display: flex;
-    flex-direction: column;
-    align-items: space-between;
-    justify-content: space-between;
-    font-family: 'Raleway', sans-serif;
-    font-size: 20px;
-}
-ol, li {
-    padding: 10px 20px;
-}
-.delete-item {
-    float: right;
-}
-fieldset {
-    width: 520px;
-    background-color: white;
-    opacity: 0.75;
-}
-#taskField {
-    margin: 5px;
-    padding: 5px;
-}
-#add-item, #urgent-item {    
-    transition: all 1s ease;
-    padding: 4px 10px 4px 10px;
-    background-color: #FF9700;
-    border: 2px solid black;
-    border-radius: 3px;
-}
-
-#add-item:hover, #urgent-item:hover {
-    background-color: #0065FF;
-}
-select {
-    margin: 5px;
-    padding: 5px;
-}
-p {
-
-    font-weight: 600;
-}
-@media(max-width:500px){
-    fieldset {
-        width: 370px;
-    }
-    #add-item, #urgent-item {    
-        transition: all 1s ease;
-        padding: 4px 4px 4px 4px;
-        background-color: #FF9700;
-        border: 2px solid black;
-        border-radius: 3px;
-    }
-    select {
-        float: center;
-    }
-}
-@media(max-width:400px){
-    fieldset {
-        width: 300px;
-    }
-}
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 }
 .items {
-  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: space-between;
+  justify-content: space-between;
   font-family: "Raleway", sans-serif;
+  font-size: 20px;
 }
 ol,
 li {
   padding: 10px 20px;
+}
+.delete-item {
+  float: right;
+}
+/* ------ */
+#sort-item {
+  margin-right: 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  background-color: white;
+  opacity: 0.75;
+  font-size: larger;
+  cursor: pointer;
+}
+fieldset {
+  border: 0;
+  width: 520px;
+  background-color: white;
+  opacity: 0.75;
+  position: relative;
+}
+legend {
+  font-weight: bold;
+}
+#taskField {
+  margin: 5px;
+  padding: 5px;
+}
+#add-item,
+#urgent-item {
+  transition: all 1s ease;
+  padding: 4px 10px 4px 10px;
+  background-color: #ff9700;
+  border: 2px solid black;
+  border-radius: 3px;
+}
+
+#add-item:hover,
+#urgent-item:hover {
+  background-color: #0065ff;
+}
+select {
+  margin: 5px;
+  padding: 5px;
+}
+p {
+  font-weight: 600;
+}
+@media (max-width: 500px) {
+  fieldset {
+    width: 370px;
+  }
+  #add-item,
+  #urgent-item {
+    transition: all 1s ease;
+    padding: 4px 4px 4px 4px;
+    background-color: #ff9700;
+    border: 2px solid black;
+    border-radius: 3px;
+  }
+  select {
+    float: center;
+  }
+}
+@media (max-width: 400px) {
+  fieldset {
+    width: 300px;
+  }
 }
