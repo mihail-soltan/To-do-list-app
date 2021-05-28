@@ -1,281 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>To-Do List App</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="script" href="index.js">
-  </head>
-  <body>
-    <div class="to-do-app">
-      <h1> To Do List </h1>
-    <div class="items"> 
-    <form>
-      <fieldset>
-        <legend>Add a to-do item</legend>
-      <input type="text" id="taskField" required placeholder="Add task"/>
-      <button id="add-item">ADD TASK</button>
-      <button id="urgent-item">URGENT</button>
-      <select name="categories" id="categories">
-       <!-- <option value="">Select category</option> -->
-       <option value="all">all</option>
-        <option value="work">work</option>
-        <option value="family">family</option>
-        <option value="finance">finance</option>
-        <option value="personal">personal</option>
-        <option value="chores">chores</option>
-      </select>
-      <select name="priorityLevels" id="priorityLevels">
-        <option id="dropdown" value="all">all</option>
-        <option id="dropdown" value="urgent">urgent</option>
-       </select>
-      </fieldset>
-    </form>
-    <!-- <input type="text" id="search"> -->
+
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+ <title>To-Do List App</title>
+ <link rel="stylesheet" href="style.css">
+ <link rel="script" href="index.js">
+</head>
+
+<body>
+ <div class="to-do-app">
+  <h1> To Do List </h1>
+  <div class="items">
+   <form>
     <fieldset>
-      <legend>Tasks</legend>
+     <legend>Add a to-do item</legend>
+     <input type="text" id="taskField" required placeholder="Add task" />
+     <input type="date" class="dateHere">
+    
+     <button id="add-item">ADD TASK</button>
+     <button id="urgent-item">URGENT</button>
+     <select name="categories" id="categories">
+      <!-- <option value="">Select category</option> -->
+      <option value="all">all</option>
+      <option value="work">work</option>
+      <option value="family">family</option>
+      <option value="finance">finance</option>
+      <option value="personal">personal</option>
+      <option value="chores">chores</option>
+     </select>
+     <select name="priorityLevels" id="priorityLevels">
+      <option id="dropdown" value="all">all</option>
+      <option id="dropdown" value="urgent">urgent</option>
+     </select>
+    </fieldset>
+
+   </form>
+   <!-- <input type="text" id="search"> -->
+   <fieldset>
+    <button id="sort-item">&#8645;</button>
+    <legend>Tasks</legend>
     <ol></ol>
-  </fieldset>
-    <p></p>
+   </fieldset>
+   <p></p>
 
-    </div>
-        <!--
-    todo: <br />
-    - add a live counter for "X total items" <br />
-    - add a message conditionally if there are 0 to-do list items<br />
-    - add a date to the items, and order them by date<br />
-    - filter out all items with the letter "f"<br />
-    - highlight tasks that include the word "urgent" in the list <br />
-    - make a 2nd list on the screen for some items based on some filter - save
-    and load the items in LocalStorage <br />
-    - drag and drop items to reorder them -->
-  </div> 
-  </body>
-  <script>
+  </div>
+ </div>
+</body>
+<script>
 
-let userFilterSelection = "all"
-let userSearch = ""
-let userPrioritySelection = "all"
-let tasks = [];
-  let counter = tasks.length;
+ let userFilterSelection = "all"
+ let userSearch = ""
+ let userPrioritySelection = "all"
+ let tasks = [];
+ let counter = tasks.length;
+   let isAscending = 1;
 
-  if (localStorage.getItem("task")) {
-      tasks = JSON.parse(localStorage.getItem("task"));
-      console.log(tasks.length);
-    }
+   let today = new Date();
+   let d = today.getDate()
+   if (d < 10) { d = '0' + d }
+   let m = today.getMonth() + 1;
+   if (m < 10) { m = '0' + m }
+   let date = d +'-' + m + '-' + today.getFullYear();
+   let createdAt = date;
+  console.log(createdAt)
 
-    if (tasks.length === 0) {
-      localStorage.setItem("counter", 0);
-      counter = 0;
-      console.log("did kdlkl");
-    }
 
-    if (localStorage.getItem("counter")) {
-      counter = JSON.parse(localStorage.getItem("counter"));
-    } else {
-      localStorage.setItem("counter", 0);
-    }
+ if (localStorage.getItem("task")) {
+  tasks = JSON.parse(localStorage.getItem("task"));
+ }
 
+ if (tasks.length === 0) {
+  localStorage.setItem("counter", 0);
+  counter = 0;
+ }
+
+ if (localStorage.getItem("counter")) {
+  counter = JSON.parse(localStorage.getItem("counter"));
+ } else {
+  localStorage.setItem("counter", 0);
+ }
 
 
 
-  const updateHTML = () => {
-    const htmlTasks = tasks
-//      .filter((task) => task.category && task.category.includes(userSearch)) - filters categories
-      .filter((task) => userFilterSelection === "all" || task.category === userFilterSelection)
-      .filter((task) => userPrioritySelection === "all" || task.priority === true)
 
-      .map((task, i) => { 
-        const text = task.text.charAt(0).toUpperCase() + task.text.slice(1)
-        if (task.priority === true) {
-        return `<li id="${task.id}" style = "color: red">
+ const updateHTML = () => {
+  const htmlTasks = tasks
+   //      .filter((task) => task.category && task.category.includes(userSearch)) - filters categories
+   .filter((task) => userFilterSelection === "all" || task.category === userFilterSelection)
+   .filter((task) => userPrioritySelection === "all" || task.priority === true)
+
+   .map((task, i) => {
+    const text = task.text.charAt(0).toUpperCase() + task.text.slice(1)
+    if (task.priority === true) {
+     return `<li id="${task.id}" style = "color: red">
         ${text}
         <button class="delete-item" id="${task.id}">&#128465;</button>
-        </li>`} else {return `<li id="${task.id}" >
+        ..................${task.createdAt}
+        </li>`} else {
+     return `<li id="${task.id}" >
         ${text}
         <button class="delete-item" id="${task.id}">&#128465;</button>
+        ..................${task.createdAt}
         </li>`
 
-   //updated the priority property 
-let tasks = [
-    { id: 0, text: "hey",  priority: true },
-    { id: 1, text: "hi there", priority: false },
-    { id: 2, text: "how was it?",  priority: false },
-    { id: 3, text: "ok great",  priority: true }
-  ];
-  let counter = tasks.length;
-  //added condition for urgent
-  const updateHTML = () => {
-    const htmlTasks = tasks
-      .map((task, i) => {
-        if (task.priority === true) {
-          return `<li id="${task.id}" class = "redText">
-          ${task.text}
-          <button class="delete-item" id="${task.id}">&#128465;</button>
-          </li>`;
-        }
-        else {
-          return `<li id="${task.id}" >
-          ${task.text}
-          <button class="delete-item" id="${task.id}">&#128465;</button>
-          </li>`;
-
-        }
-      })
-      .join("");
-    document.querySelector("ol").innerHTML = htmlTasks;
-    // listen to every delete button, remove the objet with its ID
-    // from the tasks array
-    const deleteButtons = document.querySelectorAll(".delete-item");
-    deleteButtons.forEach((btn) =>
-      btn.addEventListener("click", (event) => {
-        console.log(typeof parseInt(event.target.id));
-        removeItem(parseInt(event.target.id));
-        liveCounter();
-        updateHTML();
-      })
-    );
-    document.querySelector("p").innerHTML = liveCounter();
-  };
-  const addItem = (text, priority = false, category) => {
-    if (text.includes('work')){
-    tasks.push({ id: counter++, text, priority, category: 'work'});
-    localStorage.setItem("counter", counter);} else if(text.includes('family')){
-      tasks.push({id: counter++, text, priority, category: 'family'})
-      localStorage.setItem("counter", counter);
-    } else if(text.includes('pay')){
-      tasks.push({id: counter++, text, priority, category: 'finance'})
-      localStorage.setItem("counter", counter);
-    } else if(text.includes('personal')){
-      tasks.push({id: counter++, text, priority, category: 'personal'})
-      localStorage.setItem("counter", counter);
-    } else if(text.includes('chore')){
-      tasks.push({id: counter++, text, priority, category: 'chores'})
-      localStorage.setItem("counter", counter);
     }
-    
-    else{
-      tasks.push({ id: counter++, text, priority, category: 'general'})
-      localStorage.setItem("counter", counter);
-    }
-  };
-  const addUrgentItem =(text, priority = true, category) => {
-    if (text.includes('work')){
-    tasks.push({ id: counter++, text, priority, category: 'work'});
-    localStorage.setItem("counter", counter);} else if(text.includes('family')){
-      tasks.push({id: counter++, text, priority, category: 'family'})
-      localStorage.setItem("counter", counter);
-    } else if(text.includes('money')){
-      tasks.push({id: counter++, text, priority, category: 'finance'})
-      localStorage.setItem("counter", counter);
-    } else if(text.includes('personal')){
-      tasks.push({id: counter++, text, priority, category: 'personal'})
-      localStorage.setItem("counter", counter);
-    } else if(text.includes('chore')){
-      tasks.push({id: counter++, text, priority, category: 'chores'})
-      localStorage.setItem("counter", counter);
-    } else {tasks.push({ id: counter++, text, priority: true })} ;
-  } 
-  
-    // Local Storage
-    const saveToLocalStorage = () => {
-    tasks.forEach((task) => {
-      localStorage.setItem("task", JSON.stringify(tasks));
-    });
-  };
-
-  const removeItem = (id) => {
-    (tasks = tasks.filter((task) => task.id !== id));
-    localStorage.setItem("task", JSON.stringify(tasks));
-  };
-  //updated the priority property
-  const addItem = (msg) => tasks.push({ id: counter++, text: msg, priority: false });
-  //Added function for urgent items
-  const addUrgentItem = (msg) => tasks.push({ id: counter++, text: msg, priority: true });
-
-  const removeItem = (id) => (tasks = tasks.filter((task) => task.id !== id));
-
-  //const liveCounter = () => {return `Tasks left: ${tasks.length}`}
-  const liveCounter = () => {if (tasks.length > 0) {
-    return `Remaining tasks: ${tasks.length}`
-  } else{
-    //alert('There are no tasks left!')
-    return `There are no tasks left`
-  }}
-
-  const urgentCategory = () => {tasks.filter(task => task.priority === true);
-    }   //filters urgent tasks
-  const selectCategory = document.querySelector("#categories")
-  selectCategory.addEventListener("change", function(event){
-    console.log(event.target.value)
-    userFilterSelection = event.target.value
+   })
+   .join("");
+  document.querySelector("ol").innerHTML = htmlTasks;
+  // listen to every delete button, remove the objet with its ID
+  // from the tasks array
+  const deleteButtons = document.querySelectorAll(".delete-item");
+  deleteButtons.forEach((btn) =>
+   btn.addEventListener("click", (event) => {
+    removeItem(parseInt(event.target.id));
+    liveCounter();
     updateHTML();
-  })
-  
-  const selectPriority = document.querySelector("#priorityLevels")
-  selectPriority.addEventListener("change", function(event){
-    console.log(event.target.value)
-    userPrioritySelection = event.target.value
-    updateHTML();
-  })
-  /*
-  const searchCategory = document.querySelector("#search")
-  searchCategory.addEventListener("change", function(event){
-    event.preventDefault()
-    userSearch = event.target.value
-    updateHTML();
-  }) 
-   */
-  document
-    .querySelector("#add-item")
-    .addEventListener("click", function (event) {
-      event.preventDefault();
-      let text = document.querySelector("input");
-      if (text.value.length > 0){
-      addItem(text.value.toLowerCase());
-      saveToLocalStorage();
-      text.value = "";
-      text.value.length > 0;
-      liveCounter();
-      updateHTML();} else{
-        alert('Input Required!')
-      }
-    });
-// for the urgent item addUrgentItem(textUrg.value);
-    document
-        .querySelector("#urgent-item")
-        .addEventListener("click", function (event) {
-          event.preventDefault();
-          let textUrg = document.querySelector("input");
-          console.log(textUrg)
-          if (textUrg.value.length > 0) {
-            addUrgentItem(textUrg.value);
-            textUrg.value = "";
-            textUrg.value.length > 0;
-            liveCounter();
-            updateHTML();
-          } else {
-            alert('Input Required!')
-          }
-        });
+   })
+  );
+  document.querySelector("p").innerHTML = liveCounter();
+ };
 
-  document
-    .querySelector("#urgent-item")
-    .addEventListener("click", function (event) {
-      event.preventDefault();
-      let text = document.querySelector("input");
-      if (text.value.length > 0) {
-        addUrgentItem(text.value);
-        saveToLocalStorage();
-        text.value = "";
-        liveCounter();
-        updateHTML();
-      } else {
-        text.value.required = true;
-      }
-    })
+
+ const addItem = (text, priority = false, dueDate) => {
+  let s = dueDate
+  if (s) {
+   s = s.replace(/(\d{4})-(\d{1,2})-(\d{1,2})/, function (match, y, m, d) {
+    //  if(d<10){d='0'+d}
+    //  if(m<10){m='0'+m}
+    return d + '-' + m + '-' + y;
+   });
+  }
+  dueDate = s;
+  // console.log(dueDate)
+  if (text.includes('work')) {
+   tasks.push({ id: counter++, text, priority, category: 'work', createdAt, dueDate });
+   tasks.map(task => task.dueDate === "" ? task.createdAt : task.createdAt = task.dueDate)
+   localStorage.setItem("counter", counter);
+  } else if (text.includes('family')) {
+   tasks.push({ id: counter++, text, priority, category: 'family', createdAt, dueDate })
+   tasks.map(task => task.dueDate === "" ? task.createdAt : task.createdAt = task.dueDate)
+   localStorage.setItem("counter", counter);
+  } else if (text.includes('pay')) {
+   tasks.push({ id: counter++, text, priority, category: 'finance', createdAt, dueDate })
+   tasks.map(task => task.dueDate === "" ? task.createdAt : task.createdAt = task.dueDate)
+   localStorage.setItem("counter", counter);
+  } else if (text.includes('personal')) {
+   tasks.push({ id: counter++, text, priority, category: 'personal', createdAt, dueDate })
+   tasks.map(task => task.dueDate === "" ? task.createdAt : task.createdAt = task.dueDate)
+   localStorage.setItem("counter", counter);
+  } else if (text.includes('chore')) {
+   tasks.push({ id: counter++, text, priority, category: 'chores', createdAt, dueDate })
+   tasks.map(task => task.dueDate === "" ? task.createdAt : task.createdAt = task.dueDate)
+   localStorage.setItem("counter", counter);
+  }
+
+  else {
+   tasks.push({ id: counter++, text, priority, category: 'general', createdAt, dueDate })
+   tasks.map(task => task.dueDate === "" ? task.createdAt : task.createdAt = task.dueDate)
+   localStorage.setItem("counter", counter);
+  }
+ };
+ const addUrgentItem = (text,  dueDate) => {
+  addItem(text, true,  dueDate)
+ }
+
+ // Local Storage
+ const saveToLocalStorage = () => {
+  tasks.forEach((task) => {
+   localStorage.setItem("task", JSON.stringify(tasks));
+  });
+ };
+
+ const removeItem = (id) => {
+  (tasks = tasks.filter((task) => task.id !== id));
+  localStorage.setItem("task", JSON.stringify(tasks));
+ };
+ //const liveCounter = () => {return `Tasks left: ${tasks.length}`}
+ const liveCounter = () => {
+  if (tasks.length > 0) {
+   return `Remaining tasks: ${tasks.length}`
+  } else {
+   //alert('There are no tasks left!')
+   return `There are no tasks left`
+  }
+ }
+
+ const urgentCategory = () => {
+  tasks.filter(task => task.priority === true);
+ }   //filters urgent tasks
+ const selectCategory = document.querySelector("#categories")
+ selectCategory.addEventListener("change", function (event) {
+  userFilterSelection = event.target.value
   updateHTML();
-  </script>
+ })
+
+ const sortItems = document.querySelector("#sort-item")
+ sortItems.addEventListener("click", function(event){
+   if(isAscending){
+      tasks.sort((date1, date2) => {
+       date1 = date1.createdAt.split('-').reverse().join('-');
+       date2 = date2.createdAt.split('-').reverse().join('-');
+       if (date1 < date2) {
+         return -1;
+       } else if (date1 > date2) {
+         return 1;
+       } else {
+         return 0;
+       }
+     });
+     console.log(isAscending)
+     isAscending = 0;
+   }else {
+        tasks.sort((date1, date2) => {
+       date1 = date1.createdAt.split('-').reverse().join('-');
+       date2 = date2.createdAt.split('-').reverse().join('-');
+       if (date1 > date2) {
+         return -1;
+       } else if (date1 < date2) {
+         return 1;
+       } else {
+         return 0;
+       }
+     });
+        isAscending = 1
+  }
+ 
+console.log(isAscending)
+  updateHTML();
+ })
+
+ const selectPriority = document.querySelector("#priorityLevels")
+ selectPriority.addEventListener("change", function (event) {
+  userPrioritySelection = event.target.value
+  updateHTML();
+ })
+ /*
+ const searchCategory = document.querySelector("#search")
+ searchCategory.addEventListener("change", function(event){
+   event.preventDefault()
+   userSearch = event.target.value
+   updateHTML();
+ }) 
+  */
+ document
+  .querySelector("#add-item")
+  .addEventListener("click", function (event) {
+   event.preventDefault();
+   let text = document.querySelector("input");
+   let date1 = document.querySelector(".dateHere")
+   if (date1.value === "") date1.value = null
+   if (text.value.length > 0) {
+    addItem(text.value.toLowerCase(), false, date1.value);
+    saveToLocalStorage();
+    text.value = "";
+    date1.value = "";
+    text.value.length > 0;
+    liveCounter();
+    updateHTML();
+   } else {
+    alert('Input Required!')
+   }
+  });
+
+ document
+  .querySelector("#urgent-item")
+  .addEventListener("click", function (event) {
+   event.preventDefault();
+   let text = document.querySelector("input");
+   let date1 = document.querySelector(".dateHere")
+   if (date1.value === "") date1.value = null
+   if (text.value.length > 0) {
+    addUrgentItem(text.value, date1.value);
+    saveToLocalStorage();
+    text.value = "";
+    date1.value = "";
+    liveCounter();
+    updateHTML();
+   } else {
+    text.value.required = true;
+   }
+  })
+ updateHTML();
+</script>
+
 </html>
