@@ -53,6 +53,7 @@
  let userSearch = ""
  let userPrioritySelection = "all"
  let tasks = [];
+ let editingActiveID = null
  let counter = tasks.length;
    let isAscending = 1;
 
@@ -95,19 +96,35 @@
     if (task.priority === true) {
      return `<li id="${task.id}" style = "color: red">
         ${text}
-        <button class="delete-item" id="${task.id}">&#128465;</button>
+        <span role="button"  class="delete-item" id="${task.id}">X</span >
         ..................${task.createdAt}
         </li>`} else {
-     return `<li id="${task.id}" >
+     return `<li id="${task.id}">
         ${text}
-        <button class="delete-item" id="${task.id}">&#128465;</button>
+        <span role="button" style="color: red,
+        fontWeight: "bold",
+        marginLeft: 10,
+        cursor: "pointer"" class="delete-item" id="${task.id}">X</span >
         ..................${task.createdAt}
         </li>`
 
-    }
+    } 
+    
    })
    .join("");
-  document.querySelector("ol").innerHTML = htmlTasks;
+   //if editing active ID is task id, it'll turn into text field (112-123)
+  document.querySelector("ol").innerHTML = htmlTasks
+  // .map((task) => {
+  //   if(editingActiveID === task.id){
+  //     return `<input id =${task.id} value=${task.text}>`
+  //   } else {
+  //     return `<li id="${task.id}" >
+  //       ${text}
+  //       <button class="delete-item" id="${task.id}">&#128465;</button>
+  //       ..................${task.createdAt}
+  //       </li>`
+  //   }
+  // }).join("");
   // listen to every delete button, remove the objet with its ID
   // from the tasks array
   const deleteButtons = document.querySelectorAll(".delete-item");
@@ -164,7 +181,17 @@
  const addUrgentItem = (text,  dueDate) => {
   addItem(text, true,  dueDate)
  }
-
+ // Editing Callback
+ const editingCallback = event => {
+    if(event.keyCode === 13 || event.type === "focusout") {
+      const matchingItemIndex = tasks.findIndex((task)=> {
+        return task.id === parseInt(event.target.id)
+      })
+      tasks[matchingItemIndex].text = event.target.value
+      editingActiveID = null
+      updateHTML()
+    }
+ }
  // Local Storage
  const saveToLocalStorage = () => {
   tasks.forEach((task) => {
@@ -243,6 +270,20 @@ console.log(isAscending)
    updateHTML();
  }) 
   */
+ const myToDoListItems = document.querySelectorAll("li");
+ myToDoListItems.forEach((task) => {
+   task.addEventListener("click", function(){
+     editingActiveID === parseInt(task.id);
+     console.log('click')
+     updateHTML()
+   })
+ })
+ const activeEditingInput = document.querySelector("ol input")
+ if (activeEditingInput){
+   activeEditingInput.addEventListener("keyup", editingCallback)
+   activeEditingInput.addEventListener("focusout", editingCallback)
+ }
+
  document
   .querySelector("#add-item")
   .addEventListener("click", function (event) {
