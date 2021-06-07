@@ -28,6 +28,8 @@ li {
 }
 .delete-item {
   float: right;
+  color: red;
+  cursor: pointer;
 }
 /* ------ */
 #sort-item {
